@@ -1,27 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
-const StudentList = () => {
-  const [students, setStudents] = useState([]);
+const StudentList = ({ students, onUpdate }) => {
   const [updateName, setUpdateName] = useState('');
-
-  useEffect(() => {
-    fetchStudents();
-  }, []);
-
-  const fetchStudents = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/api/Students');
-      setStudents(response.data);
-    } catch (error) {
-      console.error('Error fetching students:', error);
-    }
-  };
 
   const handleUpdate = async (id) => {
     try {
       await axios.put(`http://localhost:5000/api/students/update/${id}`, { name: updateName });
-      fetchStudents(); // Refresh the list
+      onUpdate();
     } catch (error) {
       console.error('Error updating student:', error);
     }

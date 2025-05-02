@@ -1,3 +1,14 @@
+/* 
+ * Entry point for the Student Management System backend.
+ * - Loads environment variables (e.g., MongoDB URI).
+ * - Sets up and configures the Express server with JSON parsing and CORS.
+ * - Connects to the MongoDB database using Mongoose.
+ * - Mounts student-related API routes from the studentRoutes module under /api/students.
+ * - Starts the server on the specified port.
+ * 
+ * Note: All route logic is delegated to separate route files for modularity and clarity.
+ */
+
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -13,24 +24,8 @@ mongoose.connect(process.env.MONGO_URI).then(() => console.log('MongoDB connecte
 const studentRoutes = require('./routes/studentRoutes');
 app.use('/api/students', studentRoutes);
 
+const bookingRoutes = require('./routes/bookingRoutes');
+app.use('/api/bookings', bookingRoutes);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-app.post('/api/students/register', async (req, res) => {
-  console.log('Received request:', req.body);
-  try {
-    const { name, email, password } = req.body;
-    if (!name || !email || !password) {
-      console.log('Missing fields');
-      return res.status(400).json({ message: 'All fields are required' });
-    }
-
-    const newStudent = new Student({ name, email, password });
-    await newStudent.save();
-    console.log('Student added:', newStudent);
-    res.status(201).json(newStudent);
-  } catch (error) {
-    console.error('Error saving student:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});

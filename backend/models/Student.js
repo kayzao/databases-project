@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
-// const { v4: uuidv4 } = require('uuid'); // generates unique student IDs
 
 const StudentSchema = new mongoose.Schema({
-  student_id: { type: String, default: "later", unique: true },
+  student_id: { type: Number, required: true, unique: true },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
