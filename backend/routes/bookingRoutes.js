@@ -15,7 +15,7 @@ router.post('/register', async (req, res) => {
         courtId: Number(courtId),
         time: {
           $lt: endTime,       // existing booking starts before this ends
-          $gte: new Date(startTime.getTime() - 60000) // optional: allow 1-minute gap to reduce noise
+          $gte: new Date(startTime.getTime() - 60000)
         }
       });
   
